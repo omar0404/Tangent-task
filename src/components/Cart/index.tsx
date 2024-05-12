@@ -44,7 +44,7 @@ const Cart: React.FC<Props> = ({
               avatar={
                 <Image wrapperClassName="cart-thumbnail" src={item.thumbnail} />
               }
-              title={<a href="https://ant.design">{item.title}</a>}
+              title={<a data-testid={`product-${item.id}`}>{item.title}</a>}
               description={<p>Quantity: {item.quantity}</p>}
             />
           </List.Item>

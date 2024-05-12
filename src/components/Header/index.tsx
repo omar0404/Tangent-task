@@ -12,6 +12,7 @@ const Header = ({ cartLength, setShowCart }: Props) => (
     <h3 className="logo">Shopping Cart</h3>
     <Badge count={cartLength}>
       <ShoppingCartOutlined
+        data-testid="cart-icon"
         onClick={() => setShowCart((prevShowCart) => !prevShowCart)}
         className="cart-icon"
       />

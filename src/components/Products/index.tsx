@@ -59,7 +59,12 @@ const Products: React.FC<Props> = ({
                 />
                 <h3>{item.title}</h3>
                 <p>Price: £{item.price.toFixed(2)}</p>
-                <Button onClick={() => addToCart(item)}>Add to Cart</Button>
+                <Button
+                  data-testid={`add-to-cart-product-${item.id}`}
+                  onClick={() => addToCart(item)}
+                >
+                  Add to Cart
+                </Button>
               </Skeleton>
             </Card>
           </List.Item>
