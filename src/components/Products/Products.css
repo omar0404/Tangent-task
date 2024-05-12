@@ -1,0 +1,12 @@
+.thumbnail{
+    width: 100%;
+    height:250px;
+}
+.product-card {
+    width: 400px;
+    height: auto;
+    margin: auto;
+}
+.products {
+    padding:20px 0px;
+}
