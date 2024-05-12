@@ -8,11 +8,24 @@ import { Flex, Layout } from "antd";
 const { Footer, Content } = Layout;
 
 const App: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<
+    Array<Product & { loading?: boolean }>
+  >([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showCart, setShowCart] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const fetchProducts = (page = 0) => {
+    setLoading(true);
+    getProducts(page).then((res) => {
+      setLoading(false);
+      setProducts([...products, ...res.data?.products]);
+    });
+  };
+
   useEffect(() => {
-    getProducts().then((res) => setProducts(res.data?.products ?? []));
+    fetchProducts();
   }, []);
 
   const addToCart = (product: Product) => {
@@ -51,6 +64,10 @@ const App: React.FC = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const onLoadMore = () => {
+    setPage(page + 1);
+    fetchProducts((page + 1) * 10);
+  };
   return (
     <Flex gap="middle" wrap>
       <Layout>
@@ -61,7 +78,12 @@ const App: React.FC = () => {
           }}
         />
         <Content>
-          <Products products={products} addToCart={addToCart} />
+          <Products
+            onLoadMore={onLoadMore}
+            loading={loading}
+            products={products}
+            addToCart={addToCart}
+          />
         </Content>
         <Footer>
           <p>© {new Date().getFullYear()} Shopping Cart</p>

@@ -1,16 +1,37 @@
 import React from "react";
 import { Product } from "../../types";
-import { List, Card, Button } from "antd";
+import { List, Card, Button, Skeleton } from "antd";
 import "./Products.css";
 interface Props {
-  products: Product[];
+  products: Array<Product & { loading?: boolean }>;
   addToCart: (product: Product) => void;
+  loading: boolean;
+  onLoadMore: () => void;
 }
-
-const Products: React.FC<Props> = ({ products, addToCart }) => {
+const LOADING_ITEM = {
+  loading: true,
+  title: "",
+  price: 0,
+  thumbnail: "",
+  id: "",
+};
+const LOADING_ITEMS = [LOADING_ITEM, LOADING_ITEM, LOADING_ITEM];
+const Products: React.FC<Props> = ({
+  loading,
+  onLoadMore,
+  products,
+  addToCart,
+}) => {
   return (
     <div className="products">
       <List
+        loadMore={
+          !loading && (
+            <div className="loading-button">
+              <Button onClick={onLoadMore}>loading more</Button>
+            </div>
+          )
+        }
         grid={{
           gutter: 16,
           xs: 1,
@@ -20,18 +41,26 @@ const Products: React.FC<Props> = ({ products, addToCart }) => {
           xl: 3,
           xxl: 3,
         }}
-        dataSource={products}
+        dataSource={
+          loading && products.length
+            ? products.concat(LOADING_ITEMS)
+            : loading
+            ? LOADING_ITEMS
+            : products
+        }
         renderItem={(item) => (
           <List.Item className="product-card">
             <Card>
-              <img
-                className="thumbnail"
-                src={item.thumbnail}
-                alt={item.title}
-              />
-              <h3>{item.title}</h3>
-              <p>Price: £{item.price.toFixed(2)}</p>
-              <Button onClick={() => addToCart(item)}>Add to Cart</Button>
+              <Skeleton loading={item.loading}>
+                <img
+                  className="thumbnail"
+                  src={item.thumbnail}
+                  alt={item.title}
+                />
+                <h3>{item.title}</h3>
+                <p>Price: £{item.price.toFixed(2)}</p>
+                <Button onClick={() => addToCart(item)}>Add to Cart</Button>
+              </Skeleton>
             </Card>
           </List.Item>
         )}
