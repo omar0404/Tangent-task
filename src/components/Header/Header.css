@@ -1,0 +1,12 @@
+.logo{
+    color:white
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.cart-icon {
+    color: white;
+    font-size:x-large;
+}
